@@ -1,0 +1,60 @@
+START
+
+DEFINE flashcards as empty list
+
+FUNCTION load_flashcards():
+    IF flashcard file exists:
+        OPEN file
+        READ flashcards from file into list
+    ELSE:
+        PRINT "No flashcards found"
+
+FUNCTION save_flashcards():
+    OPEN file for writing
+    WRITE all flashcards to file
+
+FUNCTION add_flashcard():
+    PROMPT user for question
+    PROMPT user for answer
+    CREATE flashcard as dictionary with "question" and "answer"
+    ADD flashcard to flashcards list
+    CALL save_flashcards()
+    PRINT "Flashcard added"
+
+FUNCTION quiz_user():
+    IF flashcards list is empty:
+        PRINT "No flashcards to quiz"
+        RETURN
+    SET score to 0
+    FOR each flashcard in flashcards:
+        DISPLAY flashcard question
+        PROMPT user for answer
+        IF user's answer == flashcard answer:
+            PRINT "Correct!"
+            INCREMENT score
+        ELSE:
+            PRINT "Incorrect. The answer was: " + correct answer
+    PRINT final score and number of questions
+
+FUNCTION show_menu():
+    WHILE True:
+        PRINT menu options:
+            1. Add flashcard
+            2. Take a quiz
+            3. Exit
+        PROMPT user for choice
+
+        IF choice == 1:
+            CALL add_flashcard()
+        ELSE IF choice == 2:
+            CALL quiz_user()
+        ELSE IF choice == 3:
+            PRINT "Goodbye!"
+            BREAK
+        ELSE:
+            PRINT "Invalid option. Try again."
+
+CALL load_flashcards()
+CALL show_menu()
+
+END
