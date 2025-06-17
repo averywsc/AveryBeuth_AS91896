@@ -26,6 +26,33 @@ def add_flashcard():
     # Lets the user know it was saved
     print("Flashcard added successfully!")
 
+# This function runs the quiz, asking all flashcards and checking answers
+def take_quiz():
+    print("\n--- Quiz Time! ---")
+
+    # Check if there are flashcards to quiz
+    if len(flashcards) == 0:
+        print("No flashcards found. Please add some first.")
+        return  # Exit quiz if no cards
+
+    score = 0  # Track number of correct answers
+
+    # Loop through each flashcard in the list
+    for card in flashcards:
+        print("\nQuestion: " + card["question"])   # Show question
+
+        user_answer = input("Your answer: ")       # Get user's answer
+
+        # Check if the answer matches (case-insensitive, ignoring spaces)
+        if user_answer.strip().lower() == card["answer"].strip().lower():
+            print("✅ Correct!")
+            score += 1  # Increase score for correct answer
+        else:
+            print(f"❌ Incorrect. The correct answer was: {card['answer']}")
+
+    # After all questions, show the final score
+    print(f"\nYou got {score} out of {len(flashcards)} correct.")
+
 # Define a function that shows a menu and handles user input
 def show_menu():
     # This loop will keep showing the menu until the user chooses to exit
@@ -44,7 +71,7 @@ def show_menu():
 
         # If the user picks option 2, the program will start a quiz
         elif choice.strip() == "2":
-            print("placeholder")  
+            take_quiz()  # Run the quiz function
 
         # If the user picks option 3, the program should end
         elif choice.strip() == "3":
