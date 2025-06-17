@@ -8,23 +8,22 @@ flashcards = []
 def add_flashcard():
     print("\n--- Add a New Flashcard ---")
 
-    # Ask the user to enter a question
+    # Asks the user to enter a question
     question = input("Enter the question: ")
 
-    # Ask the user to enter the answer to the question
+    # Asks the user to enter the answer to the question
     answer = input("Enter the answer: ")
 
-    # Create a dictionary to store the flashcard
-    # It has two keys: 'question' and 'answer'
+    # Creates a dictionary to store the flashcard
     flashcard = {
         "question": question,
         "answer": answer
     }
 
-    # Add the new flashcard to the flashcards list
+    # Adds the new flashcard to the flashcards list
     flashcards.append(flashcard)
 
-    # Let the user know it was saved
+    # Lets the user know it was saved
     print("Flashcard added successfully!")
 
 # Define a function that shows a menu and handles user input
