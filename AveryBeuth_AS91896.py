@@ -39,12 +39,18 @@ def take_quiz():
 
     # Loop through each flashcard in the list
     for card in flashcards:
-        print("\nQuestion: " + card["question"])   # Show question
+        print("\nQuestion: " + card["question"])
+        print("Type 'skip' to move to the next question.")  # Tell user how to skip
 
-        user_answer = input("Your answer: ")       # Get user's answer
+        user_answer = input("Your answer: ").strip()
+
+        # Allow user to skip question
+        if user_answer.lower() == "skip":
+            print("Question skipped.")
+            continue  # Move on to next flashcard
 
         # Check if the answer matches (case-insensitive, ignoring spaces)
-        if user_answer.strip().lower() == card["answer"].strip().lower():
+        if user_answer.lower() == card["answer"].strip().lower():
             print("✅ Correct!")
             score += 1  # Increase score for correct answer
         else:
