@@ -1,92 +1,105 @@
-# This program lets the user create flashcards and quiz themselves
+import random   # Import random module to shuffle the flashcards order
 
 # Create an empty list to store flashcards
-# Each flashcard will be a dictionary with a 'question' and an 'answer'
+# Each flashcard is a dictionary containing a 'question' and its corresponding 'answer'
 flashcards = []
 
-# This function allows the user to create a new flashcard
 def add_flashcard():
+    """Function to add a new flashcard with a question and answer."""
     print("\n--- Add a New Flashcard ---")
 
-    # Asks the user to enter a question
-    question = input("Enter the question: ")
+    # Prompt the user to enter a question, remove extra spaces from input
+    question = input("Enter the question: ").strip()
+    # Validate that the question is not empty
+    if question == "":
+        print("Question cannot be empty.")
+        return  # Exit the function early if invalid
 
-    # Asks the user to enter the answer to the question
-    answer = input("Enter the answer: ")
+    # Prompt the user to enter the answer, remove extra spaces
+    answer = input("Enter the answer: ").strip()
+    # Validate that the answer is not empty
+    if answer == "":
+        print("Answer cannot be empty.")
+        return  # Exit the function early if invalid
 
-    # Creates a dictionary to store the flashcard
-    flashcard = {
-        "question": question,
-        "answer": answer
-    }
+    # Create a new flashcard as a dictionary and add it to the flashcards list
+    flashcards.append({"question": question, "answer": answer})
+    print("✅ Flashcard added successfully!")  # Confirm addition to user
 
-    # Adds the new flashcard to the flashcards list
-    flashcards.append(flashcard)
-
-    # Lets the user know it was saved
-    print("Flashcard added successfully!")
-
-# This function runs the quiz, asking all flashcards and checking answers
 def take_quiz():
+    """Function to conduct the quiz, ask questions, accept answers, and track score."""
     print("\n--- Quiz Time! ---")
 
-    # Check if there are flashcards to quiz
-    if len(flashcards) == 0:
+    # Check if there are any flashcards to quiz on
+    if not flashcards:
         print("No flashcards found. Please add some first.")
-        return  # Exit quiz if no cards
+        return  # Exit if no flashcards are available
 
-    score = 0  # Track number of correct answers
+    # Make a copy of flashcards to shuffle without changing the original list order
+    quiz_cards = flashcards.copy()
+    random.shuffle(quiz_cards)  # Shuffle questions to randomize quiz order
 
-    # Loop through each flashcard in the list
-    for card in flashcards:
-        print("\nQuestion: " + card["question"])
-        print("Type 'skip' to move to the next question.")  # Tell user how to skip
+    score = 0  # Variable to keep track of correct answers
+    skipped_cards = []  # List to store flashcards that the user chooses to skip
 
-        user_answer = input("Your answer: ").strip()
+    # First pass: ask each question in shuffled order
+    for card in quiz_cards:
+        print("\nQuestion:", card["question"])  # Display the question
+        print("Type 'skip' to move to the next question.")  # Inform user about skip option
 
-        # Allow user to skip question
-        if user_answer.lower() == "skip":
-            print("Question skipped.")
-            continue  # Move on to next flashcard
+        user_answer = input("Your answer: ").strip()  # Get user's answer
 
-        # Check if the answer matches (case-insensitive, ignoring spaces)
+        if user_answer.lower() == "skip":  # If user chooses to skip
+            print("Question skipped.")  # Notify that question is skipped
+            skipped_cards.append(card)  # Add skipped card to review later
+            continue  # Move to next flashcard without scoring
+
+        # Check if the user's answer matches the correct answer (case-insensitive)
         if user_answer.lower() == card["answer"].strip().lower():
-            print("✅ Correct!")
-            score += 1  # Increase score for correct answer
+            print("✅ Correct!")  # Correct answer feedback
+            score += 1  # Increase score
         else:
+            # Show correct answer if user's answer was incorrect
             print(f"❌ Incorrect. The correct answer was: {card['answer']}")
 
-    # After all questions, show the final score
-    print(f"\nYou got {score} out of {len(flashcards)} correct.")
+    # Second pass: review skipped questions to give user another chance
+    if skipped_cards:
+        print("\n--- Review Skipped Questions ---")
+        for card in skipped_cards:
+            print("\nQuestion:", card["question"])  # Display skipped question again
+            user_answer = input("Your answer: ").strip()  # Get user's second attempt answer
 
-# Define a function that shows a menu and handles user input
+            # Check answer correctness on second attempt
+            if user_answer.lower() == card["answer"].strip().lower():
+                print("✅ Correct!")  # Positive feedback
+                score += 1  # Add to score
+            else:
+                print(f"❌ Incorrect. The correct answer was: {card['answer']}")  # Show correct answer
+
+    total_cards = len(flashcards)  # Total number of flashcards the user has
+    percentage = (score / total_cards) * 100  # Calculate percentage score
+    # Display final score summary to user
+    print(f"\nFinal score: {score} / {total_cards} correct ({percentage:.1f}%).")
+
 def show_menu():
-    # This loop will keep showing the menu until the user chooses to exit
-    while True:
+    """Main menu that lets the user add flashcards, take a quiz, or exit."""
+    while True:  # Loop until the user decides to exit
         print("\nFlashcard Quiz Menu")
-        print("1. Add flashcard")   # Option to make a new flashcard
-        print("2. Take quiz")       # Option to test yourself
-        print("3. Exit")            # Option to quit the program
+        print("1. Add flashcard")  # Option to add a new flashcard
+        print("2. Take quiz")      # Option to start the quiz
+        print("3. Exit")           # Option to exit the program
 
-        # Ask the user to pick one of the options
-        choice = input("Choose an option (1-3): ")
+        choice = input("Choose an option (1-3): ").strip()  # Get user's menu choice
 
-        # If the user picks option 1, the program will let them add a flashcard
-        if choice.strip() == "1":
-            add_flashcard()
-
-        # If the user picks option 2, the program will start a quiz
-        elif choice.strip() == "2":
-            take_quiz()  # Run the quiz function
-
-        # If the user picks option 3, the program should end
-        elif choice.strip() == "3":
-            print("Goodbye!")  # Say goodbye
-            break              # This stops the loop and exits the program
-
-        # If the user types something invalid (not 1, 2, or 3)
+        if choice == "1":
+            add_flashcard()  # Call function to add a flashcard
+        elif choice == "2":
+            take_quiz()  # Call function to start the quiz
+        elif choice == "3":
+            print("Goodbye!")  # Exit message
+            break  # Exit the menu loop and end the program
         else:
-            print("Invalid choice. Try again.")  # Show an error message
+            print("Invalid choice. Try again.")  # Handle invalid inputs gracefully
 
-# Start the program by calling the menu function
+# Start the program by running the menu function
 show_menu()
