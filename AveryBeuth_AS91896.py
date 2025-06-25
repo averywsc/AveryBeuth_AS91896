@@ -84,6 +84,7 @@ def take_quiz():
 def show_menu():
     """Main menu that lets the user add flashcards, take a quiz, or exit."""
     while True:  # Loop until the user decides to exit
+        print("[PRIVACY - No user data will be saved]") #
         print("\nFlashcard Quiz Menu")
         print("1. Add flashcard")  # Option to add a new flashcard
         print("2. Take quiz")      # Option to start the quiz
